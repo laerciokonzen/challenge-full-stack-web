@@ -10,7 +10,7 @@ describe('Students Endpoints', () => {
     before(() => {
         chai.use(chaiHttp);
         app.initApp();
-    })
+    });
 
     context('Create new Student', () => {
         it('Valid data provided', (done) => {

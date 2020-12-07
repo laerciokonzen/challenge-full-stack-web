@@ -31,8 +31,6 @@ export default class App {
     }
 
     startServer() {
-        return this.express.listen(process.env.PORT || 3000, () => {
-            console.log(`Server has started on port ${process.env.PORT}.\nOpen http://localhost:${process.env.PORT}/ to see results`);
-        });
+        return this.express.listen(process.env.PORT || 3000);
     }
 }
