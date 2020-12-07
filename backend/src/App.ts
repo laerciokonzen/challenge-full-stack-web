@@ -1,6 +1,6 @@
-import * as express from "express";
-import * as cors from 'cors';
-import * as bodyParser from "body-parser";
+import express from "express";
+import cors from 'cors';
+import bodyParser from "body-parser";
 import { Routes } from "./routes";
 import { Request, Response } from "express";
 
@@ -31,7 +31,7 @@ export default class App {
     }
 
     startServer() {
-        this.express.listen(process.env.PORT || 3000, () => {
+        return this.express.listen(process.env.PORT || 3000, () => {
             console.log(`Server has started on port ${process.env.PORT}.\nOpen http://localhost:${process.env.PORT}/ to see results`);
         });
     }
