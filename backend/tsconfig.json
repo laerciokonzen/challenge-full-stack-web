@@ -23,7 +23,8 @@
       ],
       "types": [
          "reflect-metadata"
-      ]
+      ],
+      "esModuleInterop": true
    },
    "include": [
       "src/**/*.ts"
