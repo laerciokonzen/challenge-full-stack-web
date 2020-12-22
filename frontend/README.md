@@ -1,5 +1,8 @@
 # Grupo A - frontend
 
+To run this project, you need to set the followind envinronment variable:
+- VUE_APP_API_URL
+
 ## Project setup
 ```
 npm install
