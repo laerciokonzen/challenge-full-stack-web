@@ -19,8 +19,8 @@ export default class App {
 
     routes() {
         Routes.forEach(route => {
+            console.log(`Registering route for method ${route.method} on ${route.route}`);
             (this.express as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
-                console.log(`Registering route for method ${route.method} on ${route.route}`);
                 (new (route.controller as any))[route.action](req, res, next);
             });
         });

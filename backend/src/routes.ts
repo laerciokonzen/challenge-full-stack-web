@@ -28,7 +28,7 @@ export const Routes = [{
     action: "edit"
 }, {
     method: "delete",
-    route: "/student",
+    route: "/student/:academicRegister",
     controller: StudentController,
-    action: "remove"
+    action: "delete"
 }];
