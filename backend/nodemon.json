@@ -4,5 +4,5 @@
         "tests"
     ],
     "ext": "ts,json",
-    "exec": "ts-mocha --timeout 10000 --spec=tests/**/*.ts && ts-node ./src/server.ts"
+    "exec": "ts-mocha --timeout 15000 --spec=tests/**/*.ts --reporter=list && ts-node ./src/server.ts"
 }

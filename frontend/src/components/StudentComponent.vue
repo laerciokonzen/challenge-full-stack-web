@@ -59,10 +59,12 @@
                                     </v-col>
                                     <v-col
                                         cols="12"
+                                        v-if="editedIndex !== -1"
                                     >
                                         <v-text-field
                                         v-model="editedItem.academicRegister"
                                         label="RA"
+                                        disabled
                                         ></v-text-field>
                                     </v-col>
                                     <v-col
@@ -145,14 +147,34 @@
                 colored-border
                 dismissible
             >Componente não implementado</v-alert>
+            <v-alert
+                type="error"
+                v-show="showErrorMessage"
+                elevation="2"
+                colored-border
+                dismissible
+            >{{errorMessage}}</v-alert>
+            <v-alert
+                type="success"
+                v-show="showSuccessMessage"
+                elevation="2"
+                colored-border
+                dismissible
+            >{{successMessage}}</v-alert>
         </v-container>
     </v-main>
 </template>
 
 <script>
+import StudentApi from '../services/StudentApi'
+
 export default {
     data () {
         return {
+            showErrorMessage: false,
+            errorMessage: '',
+            showSuccessMessage: false,
+            successMessage: '',
             notImplementedAlert: false,
             headers: [
                 { text: 'Registro acadêmico', value: 'academicRegister' },
@@ -203,34 +225,34 @@ export default {
             this.notImplementedAlert = true
             setTimeout(()=>this.notImplementedAlert = false, 10000)
         },
+        
+        showErrorMessageAlert(message) {
+            this.showErrorMessage = true
+            this.errorMessage = message
+            setTimeout(() => {
+                this.showErrorMessage = false
+                this.errorMessage = ''
+            }, 10000)
+        },
+
+        showSuccessMessageAlert(message) {
+            this.showSuccessMessage = true
+            this.successMessage = message
+            setTimeout(() => {
+                this.showSuccessMessage = false
+                this.successMessage = ''
+            }, 10000)
+        },
 
         initialize () {
-            this.students = [
-                {
-                    academicRegister: 101235,
-                    name: 'Paula Souza',
-                    email: 'paula.souza@gmail.com',
-                    cpf: 12199999999,
-                },
-                {
-                    academicRegister: 111687,
-                    name: 'João Silva',
-                    email: 'joao.silva@gmail.om',
-                    cpf: 12199999999,
-                },
-                {
-                    academicRegister: 111365,
-                    name: 'Maurício Souza',
-                    email: 'mauricio.souza@gmail.com',
-                    cpf: 12199999999,
-                },
-                {
-                    academicRegister: 111343,
-                    name: 'Marina Miranda',
-                    email: 'marina.miranda@gmail.com',
-                    cpf: 12199999999,
-                },
-            ]
+            return StudentApi.fetchStudents()
+                .then(response => {
+                    this.students = response
+                })
+                .catch(error => {
+                    this.showErrorMessageAlert(error.message)
+                    console.log(error)
+                })
         },
 
         editItem (item) {
@@ -246,8 +268,18 @@ export default {
         },
 
         deleteItemConfirm () {
-            this.students.splice(this.editedIndex, 1)
-            this.closeDelete()
+            StudentApi.deleteStudent(this.editedItem.academicRegister)
+                .then(() => {
+                    this.showSuccessMessageAlert('Aluno deletado com sucesso!')
+                    this.initialize()
+                        .then(() => {
+                            this.closeDelete()
+                        })
+                })
+                .catch(error => {
+                    this.showErrorMessageAlert(`Erro ao deletar o aluno. "${error.message}"`)
+                    console.log(error)
+                })
         },
 
         close () {
@@ -268,11 +300,32 @@ export default {
 
         save () {
             if (this.editedIndex > -1) {
-                Object.assign(this.students[this.editedIndex], this.editedItem)
+                StudentApi.editStudent(this.editedItem)
+                    .then(() => {
+                        this.showSuccessMessageAlert('Aluno alterado com sucesso!')
+                        this.initialize()
+                            .then(() => {
+                                this.close()
+                            })
+                    })
+                    .catch(error => {
+                        this.showErrorMessageAlert(`Erro ao alterar os dados do aluno. "${error.message}"`)
+                        console.log(error)
+                    })
             } else {
-                this.students.push(this.editedItem)
+                StudentApi.createStudent(this.editedItem)
+                    .then(() => {
+                        this.showSuccessMessageAlert('Aluno cadastrado com sucesso!')
+                        this.initialize()
+                            .then(() => {
+                                this.close()
+                            })
+                    })
+                    .catch(error => {
+                        this.showErrorMessageAlert(`Erro ao cadastrar o aluno. "${error.message}"`)
+                        console.log(error)
+                    })
             }
-            this.close()
         },
     },
 }

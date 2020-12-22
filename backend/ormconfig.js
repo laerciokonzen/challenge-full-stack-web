@@ -1,3 +1,6 @@
+
+const rootDir = (process.env.NODE_ENV || "").toLocaleLowerCase() === 'production' ? 'dist' : 'src'
+
 module.exports = {
    "type": "postgres",
    "url": process.env.DATABASE_URL,
@@ -9,10 +12,10 @@ module.exports = {
    "synchronize": true,
    "logging": false,
    "entities": [
-      "src/entity/**/*.ts"
+      `${rootDir}/domain/entities/**/*`
    ],
    "migrations": [
-      "src/migration/**/*.ts"
+      `${rootDir}/database/migration/**/*`
    ],
    "cli": {
       "entitiesDir": "src/entity",

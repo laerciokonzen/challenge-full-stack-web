@@ -1,4 +1,4 @@
-# frontend
+# Grupo A - frontend
 
 ## Project setup
 ```
