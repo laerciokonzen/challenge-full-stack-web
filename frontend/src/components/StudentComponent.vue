@@ -59,10 +59,12 @@
                                     </v-col>
                                     <v-col
                                         cols="12"
+                                        v-if="editedIndex !== -1"
                                     >
                                         <v-text-field
                                         v-model="editedItem.academicRegister"
                                         label="RA"
+                                        disabled
                                         ></v-text-field>
                                     </v-col>
                                     <v-col
@@ -145,6 +147,20 @@
                 colored-border
                 dismissible
             >Componente não implementado</v-alert>
+            <v-alert
+                type="error"
+                v-show="showErrorMessage"
+                elevation="2"
+                colored-border
+                dismissible
+            >{{errorMessage}}</v-alert>
+            <v-alert
+                type="success"
+                v-show="showSuccessMessage"
+                elevation="2"
+                colored-border
+                dismissible
+            >{{successMessage}}</v-alert>
         </v-container>
     </v-main>
 </template>
@@ -153,6 +169,10 @@
 export default {
     data () {
         return {
+            showErrorMessage: false,
+            errorMessage: '',
+            showSuccessMessage: false,
+            successMessage: '',
             notImplementedAlert: false,
             headers: [
                 { text: 'Registro acadêmico', value: 'academicRegister' },
@@ -202,6 +222,24 @@ export default {
         showNotImplementedAlert() {
             this.notImplementedAlert = true
             setTimeout(()=>this.notImplementedAlert = false, 10000)
+        },
+        
+        showErrorMessageAlert(message) {
+            this.showErrorMessage = true
+            this.errorMessage = message
+            setTimeout(() => {
+                this.showErrorMessage = false
+                this.errorMessage = ''
+            }, 10000)
+        },
+
+        showSuccessMessageAlert(message) {
+            this.showSuccessMessage = true
+            this.successMessage = message
+            setTimeout(() => {
+                this.showSuccessMessage = false
+                this.successMessage = ''
+            }, 10000)
         },
 
         initialize () {
