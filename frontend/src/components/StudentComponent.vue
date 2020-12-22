@@ -166,6 +166,8 @@
 </template>
 
 <script>
+import StudentApi from '../services/StudentApi'
+
 export default {
     data () {
         return {
@@ -243,32 +245,14 @@ export default {
         },
 
         initialize () {
-            this.students = [
-                {
-                    academicRegister: 101235,
-                    name: 'Paula Souza',
-                    email: 'paula.souza@gmail.com',
-                    cpf: 12199999999,
-                },
-                {
-                    academicRegister: 111687,
-                    name: 'João Silva',
-                    email: 'joao.silva@gmail.om',
-                    cpf: 12199999999,
-                },
-                {
-                    academicRegister: 111365,
-                    name: 'Maurício Souza',
-                    email: 'mauricio.souza@gmail.com',
-                    cpf: 12199999999,
-                },
-                {
-                    academicRegister: 111343,
-                    name: 'Marina Miranda',
-                    email: 'marina.miranda@gmail.com',
-                    cpf: 12199999999,
-                },
-            ]
+            return StudentApi.fetchStudents()
+                .then(response => {
+                    this.students = response
+                })
+                .catch(error => {
+                    this.showErrorMessageAlert(error.message)
+                    console.log(error)
+                })
         },
 
         editItem (item) {
