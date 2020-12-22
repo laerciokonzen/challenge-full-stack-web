@@ -300,11 +300,32 @@ export default {
 
         save () {
             if (this.editedIndex > -1) {
-                Object.assign(this.students[this.editedIndex], this.editedItem)
+                StudentApi.editStudent(this.editedItem)
+                    .then(() => {
+                        this.showSuccessMessageAlert('Aluno alterado com sucesso!')
+                        this.initialize()
+                            .then(() => {
+                                this.close()
+                            })
+                    })
+                    .catch(error => {
+                        this.showErrorMessageAlert(`Erro ao alterar os dados do aluno. "${error.message}"`)
+                        console.log(error)
+                    })
             } else {
-                this.students.push(this.editedItem)
+                StudentApi.createStudent(this.editedItem)
+                    .then(() => {
+                        this.showSuccessMessageAlert('Aluno cadastrado com sucesso!')
+                        this.initialize()
+                            .then(() => {
+                                this.close()
+                            })
+                    })
+                    .catch(error => {
+                        this.showErrorMessageAlert(`Erro ao cadastrar o aluno. "${error.message}"`)
+                        console.log(error)
+                    })
             }
-            this.close()
         },
     },
 }
