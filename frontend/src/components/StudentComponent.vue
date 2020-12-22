@@ -268,8 +268,18 @@ export default {
         },
 
         deleteItemConfirm () {
-            this.students.splice(this.editedIndex, 1)
-            this.closeDelete()
+            StudentApi.deleteStudent(this.editedItem.academicRegister)
+                .then(() => {
+                    this.showSuccessMessageAlert('Aluno deletado com sucesso!')
+                    this.initialize()
+                        .then(() => {
+                            this.closeDelete()
+                        })
+                })
+                .catch(error => {
+                    this.showErrorMessageAlert(`Erro ao deletar o aluno. "${error.message}"`)
+                    console.log(error)
+                })
         },
 
         close () {
